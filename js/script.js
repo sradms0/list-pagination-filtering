@@ -2,13 +2,35 @@ const students = document.querySelectorAll('.student-item');
 const perPage = 10;
 
 const addSearchBar = () => {
-  const div = document.createElement('div');
-  const input = document.createElement('input');
+  const searchDiv = document.createElement('div');
+  const searchInput = document.createElement('input');
 
-  div.className = 'student-search';
-  input.placeholder = 'Search for students...';
-  div.appendChild(input);
-  document.querySelector('.page-header').appendChild(div);
+  searchDiv.className = 'student-search';
+  searchInput.placeholder = 'Search for students...';
+
+  searchInput.addEventListener('keyup', e => {
+    // hide all visible students
+    [...students]
+      .filter(i => i.style.display !== 'none')
+      .forEach(i => i.style.display = 'none');
+
+    // collect students based on search content
+    const { value } = e.target;
+    const pageDiv = document.querySelector('.page');
+    const paginationDiv = document.querySelector('.pagination');
+    const searchedStudents = [...students]
+      .filter(i => i.textContent.includes(value));
+
+    // remove current pagination searchDiv, and add new page links
+    pageDiv.removeChild(paginationDiv);
+    showPage(searchedStudents, 1);
+    addPageLinks(searchedStudents);
+    document.querySelector('a').className = 'active';
+  });
+
+  searchDiv.appendChild(searchInput);
+  document.querySelector('.page-header').appendChild(searchDiv);
+
 }
 
 const showPage = (list, page) => {
@@ -24,13 +46,13 @@ const showPage = (list, page) => {
 }
 
 const addPageLinks = list => {
-  const pages = Math.ceil(students.length / perPage);
-  const div = document.createElement('div');
-  const ul = document.createElement('ul');
+  const pages = Math.ceil(list.length / perPage);
+  const paginationDiv = document.createElement('div');
+  const paginationUl = document.createElement('ul');
 
-  div.className = 'pagination';
-  div.appendChild(ul);
-  document.querySelector('.page').appendChild(div);
+  paginationDiv.className = 'pagination';
+  paginationDiv.appendChild(paginationUl);
+  document.querySelector('.page').appendChild(paginationDiv);
 
   // create anchors
   for (let i = 1; i <= pages; i++) {
@@ -43,11 +65,11 @@ const addPageLinks = list => {
 
     // append anchor and li accordingly
     li.appendChild(a);
-    ul.appendChild(li);
+    paginationUl.appendChild(li);
   }
 
   // add listeners to anchors via propagation
-  ul.addEventListener('click', e => {
+  paginationUl.addEventListener('click', e => {
     if (e.target.tagName === 'A') {
       const a = e.target;
 
@@ -61,11 +83,11 @@ const addPageLinks = list => {
   })
 }
 
-addSearchBar();
-
-// show first page and create links on page-load
+// show first page create links, and add search
 showPage(students, 1);
 addPageLinks(students);
+addSearchBar();
+
 
 // set first page to active
 document.querySelector('a').className = 'active';
