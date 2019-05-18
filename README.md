@@ -1,5 +1,5 @@
-# List Pgaination and Filtering
-Displays and filters a list of people using "pagination".
+# List Pagination and Filtering
+Displays and filters a list using "pagination".
 
 ## Built With
 * JavaScript
