@@ -18,14 +18,26 @@ const addSearchBar = () => {
     const { value } = e.target;
     const pageDiv = document.querySelector('.page');
     const paginationDiv = document.querySelector('.pagination');
+    let noResultsDiv = document.querySelector('.no-results');
     const searchedStudents = [...students]
       .filter(i => i.textContent.includes(value));
 
-    // remove current pagination searchDiv, and add new page links
-    pageDiv.removeChild(paginationDiv);
-    showPage(searchedStudents, 1);
-    addPageLinks(searchedStudents);
-    document.querySelector('a').className = 'active';
+    // remove current pagination div and no results message if there is one
+    if (paginationDiv) pageDiv.removeChild(paginationDiv);
+    if (noResultsDiv) pageDiv.removeChild(noResultsDiv);
+
+    // show first page of searched students, and add pages
+    if (searchedStudents.length > 0) {
+      showPage(searchedStudents, 1);
+      addPageLinks(searchedStudents);
+      document.querySelector('a').className = 'active';
+      // add 'no results' message if no students were found
+    } else {
+      noResultsDiv = document.createElement('div');
+      noResultsDiv.className = 'no-results';
+      noResultsDiv.textContent = 'No results';
+      pageDiv.appendChild(noResultsDiv);
+    }
   });
 
   searchDiv.appendChild(searchInput);
@@ -87,7 +99,6 @@ const addPageLinks = list => {
 showPage(students, 1);
 addPageLinks(students);
 addSearchBar();
-
 
 // set first page to active
 document.querySelector('a').className = 'active';
