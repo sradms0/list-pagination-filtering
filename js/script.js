@@ -1,6 +1,16 @@
 const students = document.querySelectorAll('.student-item');
 const perPage = 10;
 
+const addSearchBar = () => {
+  const div = document.createElement('div');
+  const input = document.createElement('input');
+
+  div.className = 'student-search';
+  input.placeholder = 'Search for students...';
+  div.appendChild(input);
+  document.querySelector('.page-header').appendChild(div);
+}
+
 const showPage = (list, page) => {
   const max = page * perPage;
   const min = max - perPage;
@@ -50,6 +60,8 @@ const addPageLinks = list => {
     }
   })
 }
+
+addSearchBar();
 
 // show first page and create links on page-load
 showPage(students, 1);
