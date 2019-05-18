@@ -1,5 +1,5 @@
 # List Pgaination and Filtering
-Displays "pagination" technique of a web page.
+Displays and filters a list of people using "pagination".
 
 ## Built With
 * JavaScript
